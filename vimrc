@@ -23,9 +23,9 @@ Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'vim-ruby/vim-ruby'
-Bundle 'wincent/Command-T'
 Bundle 'koron/nyancat-vim'
 Bundle 'vim-scripts/ruby-matchit'
+Bundle 'kien/ctrlp.vim'
 
 " Clojure
 Bundle 'tpope/vim-foreplay'

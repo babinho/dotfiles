@@ -1,5 +1,6 @@
 --- 
 :sources: 
+- https://rubygems.org
 - http://rubygems.org
 :benchmark: false
 :update_sources: true
