@@ -13,11 +13,6 @@ setopt AUTO_PUSHD
 # Allow completing of the remainder of a command
 bindkey "^N" insert-last-word
 
-# Show contents of directory after cd-ing into it
-chpwd() {
-  ls -lrthG
-}
-
 # Save a ton of history
 HISTSIZE=20000
 HISTFILE=~/.zsh_history
@@ -45,13 +40,18 @@ stty stop undef
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git rbenv rails3)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
 # Source my custom files after oh-my-zsh so I can override things.
 source $HOME/.dotfiles/zsh/aliases
 source $HOME/.dotfiles/zsh/functions
+
+# Show contents of directory after cd-ing into it
+chpwd() {
+  a
+}
 
 # Customize to your needs...
 export PATH=bin:~/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin

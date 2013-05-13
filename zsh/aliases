@@ -70,6 +70,7 @@ alias remigrate='rake db:migrate && rake db:migrate:redo && rake db:schema:dump 
 alias rdm="be rake db:migrate"
 alias rdtp="be rake db:test:prepare"
 alias rs='bundle install && rails server -p 3000'
+alias rsd='bundle install && rails server -p 3000 --debugger'
 alias safepush='git pull --rebase && bundle install && rdm && rake && git push'
 alias so='source ~/.dotfiles/zsh/aliases'
 alias ss='ruby app.rb'
@@ -83,7 +84,7 @@ alias u='cd ..'
 alias v='vim'
 alias vi='vim'
 alias vps='ssh -t babinho@babinho.net'
-alias vu='cd ~/code/vim-university'
+alias wip='git add . && git commit -am "WIP"'
 alias z='zeus'
 alias zs='zeus start'
 

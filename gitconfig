@@ -4,6 +4,7 @@
 [alias]
 	co = checkout
         cleanup = !git remote prune origin && git gc && git clean -df && git stash clear
+        ready = rebase -i @{u}
 [color]
 	diff = auto
 	status = auto
