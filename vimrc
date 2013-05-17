@@ -32,7 +32,7 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'tpope/vim-vividchalk'
 Bundle 'vim-scripts/molokai'
 Bundle 'twerth/ir_black'
-
+Bundle 'Lokaltog/vim-powerline'
 
 " Clojure
 Bundle 'tpope/vim-foreplay'
@@ -170,7 +170,7 @@ set noesckeys
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
 
 " Highlight the status line
-highlight StatusLine ctermfg=blue ctermbg=yellow
+" highlight StatusLine ctermfg=blue ctermbg=yellow
 
 " Format xml files
 au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null" 
@@ -360,7 +360,14 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif
 
+" colorscheme
 colorscheme molokai
+set t_Co=256
+
+" Powerline stuff
+set laststatus=2
+set encoding=utf-8
+let g:Powerline_symbols='fancy'
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
