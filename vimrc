@@ -27,6 +27,7 @@ Bundle 'vim-ruby/vim-ruby'
 Bundle 'koron/nyancat-vim'
 Bundle 'vim-scripts/ruby-matchit'
 Bundle 'kien/ctrlp.vim'
+Bundle 'sunaku/vim-ruby-minitest'
 
 " Add some colors
 Bundle 'tpope/vim-vividchalk'
@@ -361,8 +362,8 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 " colorscheme
-colorscheme molokai
 set t_Co=256
+colorscheme molokai
 
 " Powerline stuff
 set laststatus=2
