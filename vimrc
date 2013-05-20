@@ -33,6 +33,9 @@ Bundle 'sunaku/vim-ruby-minitest'
 Bundle 'tpope/vim-vividchalk'
 Bundle 'vim-scripts/molokai'
 Bundle 'twerth/ir_black'
+Bundle 'mnoble/tomorrow-night-vim'
+
+" powerline
 Bundle 'Lokaltog/vim-powerline'
 
 " Clojure
@@ -363,7 +366,7 @@ endif
 
 " colorscheme
 set t_Co=256
-colorscheme molokai
+colorscheme tomorrow-night
 
 " Powerline stuff
 set laststatus=2
