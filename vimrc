@@ -28,6 +28,7 @@ Bundle 'koron/nyancat-vim'
 Bundle 'vim-scripts/ruby-matchit'
 Bundle 'kien/ctrlp.vim'
 Bundle 'sunaku/vim-ruby-minitest'
+Bundle 'scrooloose/nerdtree'
 
 " Add some colors
 Bundle 'tpope/vim-vividchalk'
@@ -78,6 +79,7 @@ map <Leader>fix :cnoremap % %<CR>
 map <Leader>fa :sp test/factories.rb<CR>
 map <Leader>h :CommandT<CR>
 map <Leader>i mmgg=G`m<CR>
+map <Leader>j :NERDTreeToggle<CR>
 map <Leader>m :Rmodel 
 map <Leader>o :call RunCurrentLineInTest()<CR>
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
@@ -129,7 +131,6 @@ map <C-p> :cp<CR>
 imap <c-e> <c-o>$
 imap <c-a> <c-o>^
 
-set nocompatible
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
 set history=500		" keep 500 lines of command line history
 set ruler		" show the cursor position all the time
@@ -153,7 +154,7 @@ set laststatus=2  " Always show status line.
 set relativenumber
 set gdefault " assume the /g flag on :s substitutions to replace all matches in a line
 set autoindent " always set autoindenting on
-set bg=light
+set nocompatible
 
 " Set the tag file search order
 set tags=./tags;
