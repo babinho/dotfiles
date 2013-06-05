@@ -238,10 +238,10 @@ function! RunCurrentTest()
     call SetTestFile()
 
     if match(expand('%'), '\.feature$') != -1
-      call SetTestRunner("!cucumber")
+      call SetTestRunner("!zeus cucumber")
       exec g:bjo_test_runner g:bjo_test_file
     elseif match(expand('%'), '_spec\.rb$') != -1
-      call SetTestRunner("!bin/rspec")
+      call SetTestRunner("!zeus rspec")
       exec g:bjo_test_runner g:bjo_test_file
     else
       call SetTestRunner("!ruby -Itest")
