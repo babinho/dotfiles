@@ -1,3 +1,4 @@
+set nocompatible
 " Use Pathogen:
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
@@ -154,7 +155,6 @@ set laststatus=2  " Always show status line.
 set relativenumber
 set gdefault " assume the /g flag on :s substitutions to replace all matches in a line
 set autoindent " always set autoindenting on
-set nocompatible
 
 " Set the tag file search order
 set tags=./tags;
@@ -313,11 +313,8 @@ let g:CommandTMatchWindowAtTop=1
 " situations.
 set timeoutlen=500
 
-" Don't go past 100 chars on levelup:
-autocmd BufNewFile,BufRead /Users/ben/code/levelup/*.rb set colorcolumn=100
-
-" Remove trailing whitespace on save for ruby files.
-au BufWritePre *.rb :%s/\s\+$//e
+" Remove trailing whitespace on save for files.
+au FileType ruby,c,cpp,eruby,haml,coffee,javascript BufWritePre :%s/\s\+$//e
 
 function! OpenFactoryFile()
   if filereadable("test/factories.rb")
@@ -405,3 +402,6 @@ if has("autocmd")
 
 endif " has("autocmd")
 
+" some stuff to get the mouse working in the term
+set mouse=a
+set ttymouse=xterm2
