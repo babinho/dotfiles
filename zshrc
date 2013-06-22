@@ -62,12 +62,6 @@ eval "$(rbenv init -)"
 
 PATH=$PATH:/usr/texbin
 
-# Shaves about 0.5s off Rails boot time (when using perf patch). Taken from https://gist.github.com/1688857
-export RUBY_HEAP_MIN_SLOTS=1000000
-export RUBY_HEAP_SLOTS_INCREMENT=1000000
-export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
-export RUBY_GC_MALLOC_LIMIT=1000000000
-export RUBY_HEAP_FREE_MIN=500000
-
-export LD_LIBRARY_PATH=/opt/oracle/instantclient_11_2
-export NLS_LANG=CROATIAN_CROATIA.AL32UTF8
+# Setting for the new UTF-8 terminal support in Lion
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8

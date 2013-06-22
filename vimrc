@@ -30,6 +30,7 @@ Bundle 'vim-scripts/ruby-matchit'
 Bundle 'kien/ctrlp.vim'
 Bundle 'sunaku/vim-ruby-minitest'
 Bundle 'scrooloose/nerdtree'
+Bundle 'bronson/vim-trailing-whitespace'
 
 " Add some colors
 Bundle 'tpope/vim-vividchalk'
@@ -81,7 +82,7 @@ map <Leader>fa :sp test/factories.rb<CR>
 map <Leader>h :CommandT<CR>
 map <Leader>i mmgg=G`m<CR>
 map <Leader>j :NERDTreeToggle<CR>
-map <Leader>m :Rmodel 
+map <Leader>m :Rmodel
 map <Leader>o :call RunCurrentLineInTest()<CR>
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 map <Leader>ra :%s/
@@ -90,22 +91,22 @@ map <Leader>rs :vsp <C-r>#<cr><C-w>w
 map <Leader>rt q:?!ruby<cr><cr>
 map <Leader>rw :%s/\s\+$//<cr>:w<cr>
 map <Leader>sc :sp db/schema.rb<cr>
-map <Leader>sg :sp<cr>:grep 
-map <Leader>sm :RSmodel 
+map <Leader>sg :sp<cr>:grep
+map <Leader>sm :RSmodel
 map <Leader>sp yss<p>
 map <Leader>sn :e ~/.vim/snippets/ruby.snippets<CR>
 map <Leader>so :so %<cr>
 map <Leader>sq j<c-v>}klllcs<esc>:wq<cr>
 map <Leader>ss ds)i <esc>:w<cr>
 map <Leader>st :!ruby -Itest % -n "//"<left><left>
-map <Leader>su :RSunittest 
-map <Leader>sv :RSview 
+map <Leader>su :RSunittest
+map <Leader>sv :RSview
 map <Leader>t :w<cr>:call RunCurrentTest()<CR>
 map <Leader>y :!rspec --drb %<cr>
 map <Leader>u :Runittest<cr>
 map <Leader>vc :RVcontroller<cr>
 map <Leader>vf :RVfunctional<cr>
-map <Leader>vg :vsp<cr>:grep 
+map <Leader>vg :vsp<cr>:grep
 map <Leader>vi :tabe ~/.vimrc<CR>
 map <Leader>vu :RVunittest<CR>
 map <Leader>vm :RVmodel<cr>
@@ -178,14 +179,14 @@ let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;
 " highlight StatusLine ctermfg=blue ctermbg=yellow
 
 " Format xml files
-au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null" 
+au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 
 set shiftround " When at 3 spaces and I hit >>, go to 4, not 5.
 
 set nofoldenable " Say no to code folding...
 
 command! Q q " Bind :Q to :q
-command! Qall qall 
+command! Qall qall
 
 
 " Disable Ex mode
@@ -195,7 +196,7 @@ map Q <Nop>
 map K <Nop>
 
 " When loading text files, wrap them and don't split up words.
-au BufNewFile,BufRead *.txt setlocal wrap 
+au BufNewFile,BufRead *.txt setlocal wrap
 au BufNewFile,BufRead *.txt setlocal lbr
 
 " Better? completion on command line
@@ -313,9 +314,6 @@ let g:CommandTMatchWindowAtTop=1
 " situations.
 set timeoutlen=500
 
-" Remove trailing whitespace on save for files.
-au FileType ruby,c,cpp,eruby,haml,coffee,javascript BufWritePre :%s/\s\+$//e
-
 function! OpenFactoryFile()
   if filereadable("test/factories.rb")
     execute ":sp test/factories.rb"
@@ -386,7 +384,7 @@ if has("autocmd")
 
   " For all text files set 'textwidth' to 78 characters.
   autocmd FileType text setlocal textwidth=78
-  
+
   " For all text files set 'textwidth' to 78 characters.
   autocmd FileType markdown setlocal textwidth=78
 
@@ -399,6 +397,9 @@ if has("autocmd")
     \ endif
 
   augroup END
+
+  " Clean whitespace in ruby and haml
+  au BufWritePre *.rb,*.haml FixWhitespace
 
 endif " has("autocmd")
 

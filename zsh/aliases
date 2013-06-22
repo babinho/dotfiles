@@ -54,6 +54,7 @@ alias -g M='| more'
 alias mastre='master'
 alias newscreen="screen -S foo"
 alias -g L='| less'
+alias oracle='export LD_LIBRARY_PATH=/opt/oracle/instantclient_11_2 && export NLS_LANG=CROATIAN_CROATIA.AL32UTF8'
 alias pc='production-console'
 alias patch='git format-patch HEAD^ --stdout > patch.diff'
 alias prepdb='dbprep'
