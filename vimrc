@@ -31,6 +31,9 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'sunaku/vim-ruby-minitest'
 Bundle 'scrooloose/nerdtree'
 Bundle 'bronson/vim-trailing-whitespace'
+Bundle "MarcWeber/vim-addon-mw-utils"
+Bundle "tomtom/tlib_vim"
+Bundle "garbas/vim-snipmate"
 
 " Add some colors
 Bundle 'tpope/vim-vividchalk'
@@ -146,7 +149,7 @@ set autoread
 set wmh=0
 set viminfo+=!
 set guioptions-=T
-set guifont=Triskweline_10:h10
+set guifont=Menlo:h11
 set et
 set sw=2
 set smarttab
