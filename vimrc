@@ -15,8 +15,6 @@ Bundle 'gmarik/vundle'
 " My bundles
 Bundle 'ervandew/supertab'
 Bundle 'kchmck/vim-coffee-script'
-Bundle 'tomtom/tcomment_vim'
-Bundle 'tpope/vim-cucumber'
 Bundle 'tpope/vim-endwise'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-repeat'
@@ -28,18 +26,14 @@ Bundle 'vim-ruby/vim-ruby'
 Bundle 'koron/nyancat-vim'
 Bundle 'vim-scripts/ruby-matchit'
 Bundle 'kien/ctrlp.vim'
-Bundle 'sunaku/vim-ruby-minitest'
 Bundle 'scrooloose/nerdtree'
 Bundle 'bronson/vim-trailing-whitespace'
 Bundle "MarcWeber/vim-addon-mw-utils"
 Bundle "tomtom/tlib_vim"
 Bundle "garbas/vim-snipmate"
-
-" Add some colors
-Bundle 'tpope/vim-vividchalk'
-Bundle 'vim-scripts/molokai'
-Bundle 'twerth/ir_black'
-Bundle 'mnoble/tomorrow-night-vim'
+Bundle 'tsaleh/vim-matchit'
+Bundle 'tpope/vim-commentary'
+Bundle 'honza/vim-snippets'
 
 " powerline
 Bundle 'Lokaltog/vim-powerline'
@@ -48,6 +42,9 @@ Bundle 'Lokaltog/vim-powerline'
 Bundle 'tpope/vim-foreplay'
 Bundle 'tpope/vim-classpath'
 Bundle 'guns/vim-clojure-static'
+
+"rbenv support
+Bundle 'tpope/vim-rbenv'
 
 " ================
 " Ruby stuff
@@ -69,6 +66,7 @@ vmap <Leader>b :<C-U>!git blame <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'
 map <Leader>bb :!bundle install<cr>
 nmap <Leader>bi :source ~/.vimrc<cr>:BundleInstall<cr>
 vmap <Leader>bed "td?describe<cr>obed<tab><esc>"tpkdd/end<cr>o<esc>:nohl<cr>
+map <Leader>c :so coverage.vim<CR>
 map <Leader>cc :!cucumber --drb %<CR>
 map <Leader>cu :Tabularize /\|<CR>
 map <Leader>co ggVG"*y
@@ -80,9 +78,10 @@ map <Leader>gc :Gcommit -m ""<LEFT>
 map <Leader>gs :Gstatus<CR>
 map <Leader>gw :!git add . && git commit -m 'WIP' && git push<cr>
 map <Leader>f :call OpenFactoryFile()<CR>
+map <Leader>fw :FixWhitespace<CR>
 map <Leader>fix :cnoremap % %<CR>
 map <Leader>fa :sp test/factories.rb<CR>
-map <Leader>h :CommandT<CR>
+map <Leader>h :nohl<CR>
 map <Leader>i mmgg=G`m<CR>
 map <Leader>j :NERDTreeToggle<CR>
 map <Leader>m :Rmodel
@@ -105,7 +104,7 @@ map <Leader>st :!ruby -Itest % -n "//"<left><left>
 map <Leader>su :RSunittest
 map <Leader>sv :RSview
 map <Leader>t :w<cr>:call RunCurrentTest()<CR>
-map <Leader>y :!rspec --drb %<cr>
+map <Leader>y :!bundle exec rspec --drb %<cr>
 map <Leader>u :Runittest<cr>
 map <Leader>vc :RVcontroller<cr>
 map <Leader>vf :RVfunctional<cr>
@@ -117,13 +116,19 @@ map <Leader>vv :RVview<cr>
 map <Leader>w <C-w>w
 map <Leader>x :exec getline(".")<cr>
 
+" split resizing
+map <Leader>+ <C-w>+
+map <Leader>- <C-w>-
+map <Leader>> <C-w>>
+map <Leader>< <C-w><
+
 " Edit another file in the same directory as the current file
 " uses expression to extract path from current file's path
 map <Leader>e :e <C-R>=expand("%:p:h") . '/'<CR>
 map <Leader>s :split <C-R>=expand("%:p:h") . '/'<CR>
 map <Leader>v :vnew <C-R>=expand("%:p:h") . '/'<CR>
 
-map <C-h> :nohl<cr>
+map <C-o> :nohl<cr>
 imap <C-l> :<Space>
 map <C-s> <esc>:w<CR>
 imap <C-s> <esc>:w<CR>
@@ -149,7 +154,7 @@ set autoread
 set wmh=0
 set viminfo+=!
 set guioptions-=T
-set guifont=Menlo:h11
+set guifont=Menlo:h12
 set et
 set sw=2
 set smarttab
@@ -245,10 +250,10 @@ function! RunCurrentTest()
       call SetTestRunner("!zeus cucumber")
       exec g:bjo_test_runner g:bjo_test_file
     elseif match(expand('%'), '_spec\.rb$') != -1
-      call SetTestRunner("!zeus rspec")
+      call SetTestRunner("!bundle exec rspec")
       exec g:bjo_test_runner g:bjo_test_file
     else
-      call SetTestRunner("!ruby -Itest")
+      call SetTestRunner("!bundle exec m")
       exec g:bjo_test_runner g:bjo_test_file
     endif
   else
@@ -266,7 +271,14 @@ function! RunCurrentLineInTest()
     call SetTestFileWithLine()
   end
 
-  exec "!bin/rspec" g:bjo_test_file . ":" . g:bjo_test_file_line
+  if match(expand('%'), '\.feature$') != -1
+    call SetTestRunner("!zeus cucumber")
+  elseif match(expand('%'), '_spec\.rb$') != -1
+    call SetTestRunner("!rspec")
+  elseif match(expand('%'), '_test\.rb$') != -1
+    call SetTestRunner("!bundle exec m")
+  end
+  exec g:bjo_test_runner g:bjo_test_file . ":" . g:bjo_test_file_line
 endfunction
 
 function! SetTestFile()
@@ -363,9 +375,8 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif
 
-" colorscheme
+colorscheme vividchalk
 set t_Co=256
-colorscheme tomorrow-night
 
 " Powerline stuff
 set laststatus=2
@@ -409,3 +420,6 @@ endif " has("autocmd")
 " some stuff to get the mouse working in the term
 set mouse=a
 set ttymouse=xterm2
+
+" open markdown files in marked
+command! Marked silent !open -a "Marked.app" "%:p"
