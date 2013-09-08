@@ -71,3 +71,8 @@ export LC_ALL=en_US.UTF-8
 export EDITOR='vim'
 
 source ~/bin/tmuxinator.zsh
+
+# ruby GC tuning
+export RUBY_HEAP_MIN_SLOTS=2000000
+export RUBY_HEAP_FREE_MIN=20000
+export RUBY_GC_MALLOC_LIMIT=100000000

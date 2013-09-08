@@ -375,7 +375,8 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif
 
-colorscheme vividchalk
+set background=dark
+colorscheme ir_black
 set t_Co=256
 
 " Powerline stuff
