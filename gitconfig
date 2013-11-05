@@ -6,6 +6,7 @@
         cleanup = !git remote prune origin && git gc && git clean -df && git stash clear
         ready = rebase -i @{u}
         lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+	ctags = !.git/hooks/ctags
 [color]
 	diff = auto
 	status = auto
@@ -25,8 +26,10 @@
 	autosetupmerge = true
         autosetuprebase = always
 [push]
-	default = tracking
+	default = current
 [rerere]
 	enabled = 1
 [github]
 	user = babinho
+[init]
+	templatedir = ~/.git_template

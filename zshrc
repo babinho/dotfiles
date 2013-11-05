@@ -43,7 +43,7 @@ stty stop undef
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git zsh-syntax-highlighting rbenv ruby)
+plugins=(git bundler brew gem zsh-syntax-highlighting rbenv ruby)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -57,13 +57,15 @@ chpwd() {
 }
 
 # Customize to your needs...
-export PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin
+PATH=/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin
 
-PATH=./bin:$HOME/.rbenv/bin:$PATH # Add rbenv to PATH
+PATH=$HOME/bin:$HOME/.rbenv/bin:$PATH # Add rbenv to PATH
+
+PATH=$HOME/.cask/bin:$PATH # Add cask to PATH
 
 eval "$(rbenv init -)"
 
-PATH=$PATH:/usr/texbin
+export PATH=$PATH:/usr/texbin
 
 # Setting for the new UTF-8 terminal support in Lion
 export LC_CTYPE=en_US.UTF-8

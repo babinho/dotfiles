@@ -14,15 +14,21 @@ Bundle 'gmarik/vundle'
 
 " My bundles
 Bundle 'ervandew/supertab'
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'tpope/vim-endwise'
+
+Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-repeat'
-Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-unimpaired'
+Bundle 'kana/vim-textobj-user'
+Bundle 'nelstrom/vim-textobj-rubyblock'
+Bundle 'tpope/vim-bundler'
+Bundle 'tpope/vim-rake'
+
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'tpope/vim-endwise'
+Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-markdown'
-Bundle 'vim-ruby/vim-ruby'
 Bundle 'koron/nyancat-vim'
 Bundle 'vim-scripts/ruby-matchit'
 Bundle 'kien/ctrlp.vim'
@@ -31,7 +37,6 @@ Bundle 'bronson/vim-trailing-whitespace'
 Bundle "MarcWeber/vim-addon-mw-utils"
 Bundle "tomtom/tlib_vim"
 Bundle "garbas/vim-snipmate"
-Bundle 'tsaleh/vim-matchit'
 Bundle 'tpope/vim-commentary'
 Bundle 'honza/vim-snippets'
 
@@ -43,8 +48,18 @@ Bundle 'tpope/vim-foreplay'
 Bundle 'tpope/vim-classpath'
 Bundle 'guns/vim-clojure-static'
 
+" Elixir
+Bundle 'elixir-lang/vim-elixir'
+
+" tmux support
+Bundle "benmills/vimux"
+Bundle 'jgdavey/vim-turbux'
+Bundle "christoomey/vim-tmux-navigator"
+
 "rbenv support
 Bundle 'tpope/vim-rbenv'
+
+runtime macros/matchit.vim
 
 " ================
 " Ruby stuff
@@ -62,17 +77,10 @@ augroup END
 
 let mapleader = ","
 
-vmap <Leader>b :<C-U>!git blame <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR>
 map <Leader>bb :!bundle install<cr>
 nmap <Leader>bi :source ~/.vimrc<cr>:BundleInstall<cr>
-vmap <Leader>bed "td?describe<cr>obed<tab><esc>"tpkdd/end<cr>o<esc>:nohl<cr>
 map <Leader>c :so coverage.vim<CR>
-map <Leader>cc :!cucumber --drb %<CR>
-map <Leader>cu :Tabularize /\|<CR>
 map <Leader>co ggVG"*y
-map <Leader>d odebugger<cr>puts 'debugger'<esc>:w<cr>
-map <Leader>dr :e ~/Dropbox<cr>
-map <Leader>ec :e ~/code/
 map <Leader>gac :Gcommit -m -a ""<LEFT>
 map <Leader>gc :Gcommit -m ""<LEFT>
 map <Leader>gs :Gstatus<CR>
@@ -80,39 +88,13 @@ map <Leader>gw :!git add . && git commit -m 'WIP' && git push<cr>
 map <Leader>f :call OpenFactoryFile()<CR>
 map <Leader>fw :FixWhitespace<CR>
 map <Leader>fix :cnoremap % %<CR>
-map <Leader>fa :sp test/factories.rb<CR>
 map <Leader>h :nohl<CR>
 map <Leader>i mmgg=G`m<CR>
 map <Leader>j :NERDTreeToggle<CR>
-map <Leader>m :Rmodel
-map <Leader>o :call RunCurrentLineInTest()<CR>
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
-map <Leader>ra :%s/
-map <Leader>rd :!bundle exec rspec % --format documentation<CR>
-map <Leader>rs :vsp <C-r>#<cr><C-w>w
-map <Leader>rt q:?!ruby<cr><cr>
-map <Leader>rw :%s/\s\+$//<cr>:w<cr>
-map <Leader>sc :sp db/schema.rb<cr>
-map <Leader>sg :sp<cr>:grep
 map <Leader>sm :RSmodel
-map <Leader>sp yss<p>
-map <Leader>sn :e ~/.vim/snippets/ruby.snippets<CR>
 map <Leader>so :so %<cr>
-map <Leader>sq j<c-v>}klllcs<esc>:wq<cr>
-map <Leader>ss ds)i <esc>:w<cr>
-map <Leader>st :!ruby -Itest % -n "//"<left><left>
-map <Leader>su :RSunittest
-map <Leader>sv :RSview
-map <Leader>t :w<cr>:call RunCurrentTest()<CR>
-map <Leader>y :!bundle exec rspec --drb %<cr>
-map <Leader>u :Runittest<cr>
-map <Leader>vc :RVcontroller<cr>
-map <Leader>vf :RVfunctional<cr>
-map <Leader>vg :vsp<cr>:grep
 map <Leader>vi :tabe ~/.vimrc<CR>
-map <Leader>vu :RVunittest<CR>
-map <Leader>vm :RVmodel<cr>
-map <Leader>vv :RVview<cr>
 map <Leader>w <C-w>w
 map <Leader>x :exec getline(".")<cr>
 
@@ -130,8 +112,6 @@ map <Leader>v :vnew <C-R>=expand("%:p:h") . '/'<CR>
 
 map <C-o> :nohl<cr>
 imap <C-l> :<Space>
-map <C-s> <esc>:w<CR>
-imap <C-s> <esc>:w<CR>
 map <C-t> <esc>:tabnew<CR>
 map <C-x> <C-w>c
 map <C-n> :cn<CR>
@@ -147,14 +127,13 @@ set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
 set autoindent
 set showmatch
-set nowrap
+" set nowrap
 set backupdir=~/.tmp
 set directory=~/.tmp " Don't clutter my dirs up with swp and tmp files
 set autoread
 set wmh=0
 set viminfo+=!
 set guioptions-=T
-set guifont=Menlo:h12
 set et
 set sw=2
 set smarttab
@@ -344,13 +323,13 @@ highlight SignColumn ctermbg=black
 " RENAME CURRENT FILE (thanks Gary Bernhardt)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! RenameFile()
-    let old_name = expand('%')
-    let new_name = input('New file name: ', expand('%'), 'file')
-    if new_name != '' && new_name != old_name
-        exec ':saveas ' . new_name
-        exec ':silent !rm ' . old_name
-        redraw!
-    endif
+  let old_name = expand('%')
+  let new_name = input('New file name: ', expand('%'), 'file')
+  if new_name != '' && new_name != old_name
+    exec ':saveas ' . new_name
+    exec ':silent !rm ' . old_name
+    redraw!
+  endif
 endfunction
 map <Leader>n :call RenameFile()<cr>
 
@@ -376,7 +355,7 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 set background=dark
-colorscheme ir_black
+colorscheme tir_black
 set t_Co=256
 
 " Powerline stuff
@@ -395,21 +374,21 @@ if has("autocmd")
 
   " Put these in an autocmd group, so that we can delete them easily.
   augroup vimrcEx
-  au!
+    au!
 
-  " For all text files set 'textwidth' to 78 characters.
-  autocmd FileType text setlocal textwidth=78
+    " For all text files set 'textwidth' to 78 characters.
+    autocmd FileType text setlocal textwidth=78
 
-  " For all text files set 'textwidth' to 78 characters.
-  autocmd FileType markdown setlocal textwidth=78
+    " For all text files set 'textwidth' to 78 characters.
+    autocmd FileType markdown setlocal textwidth=78
 
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid or when inside an event handler
-  " (happens when dropping a file on gvim).
-  autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
-    \ endif
+    " When editing a file, always jump to the last known cursor position.
+    " Don't do it when the position is invalid or when inside an event handler
+    " (happens when dropping a file on gvim).
+    autocmd BufReadPost *
+          \ if line("'\"") > 0 && line("'\"") <= line("$") |
+          \   exe "normal g`\"" |
+          \ endif
 
   augroup END
 
@@ -424,3 +403,11 @@ set ttymouse=xterm2
 
 " open markdown files in marked
 command! Marked silent !open -a "Marked.app" "%:p"
+
+" don't clear screen when background/resume
+set t_ti= t_te=
+
+" always show the tab line
+set showtabline=2
+
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
