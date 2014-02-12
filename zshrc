@@ -13,6 +13,7 @@ setopt AUTO_PUSHD
 # Show completion on first tab
 setopt menucomplete
 
+
 # Allow completing of the remainder of a command
 bindkey "^N" insert-last-word
 
@@ -40,12 +41,10 @@ COMPLETION_WAITING_DOTS="true"
 stty start undef
 stty stop undef
 
-
-
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git zsh-syntax-highlighting rbenv ruby)
+plugins=(git brew bundler zsh-syntax-highlighting ruby chruby)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -63,9 +62,11 @@ PATH=/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:/usr
 
 PATH=$HOME/.cask/bin:$PATH # Add cask to PATH
 
-# rbenv stuff
-PATH=$HOME/bin:$HOME/.rbenv/bin:$PATH # Add rbenv to PATH
-eval "$(rbenv init -)"
+# chruby
+#source /usr/local/opt/chruby/share/chruby/chruby.sh
+#source /usr/local/opt/chruby/share/chruby/auto.sh
+
+chruby ruby-2.0.0-p353
 
 export PATH=$PATH:/usr/texbin
 
@@ -74,9 +75,15 @@ export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export EDITOR='vim'
 
+# vim commands for the shell
+set -o vi
+
 source ~/bin/tmuxinator.zsh
 
 # ruby GC tuning
-export RUBY_HEAP_MIN_SLOTS=2000000
+export RUBY_GC_HEAP_INIT_SLOTS=2000000
 export RUBY_HEAP_FREE_MIN=20000
 export RUBY_GC_MALLOC_LIMIT=100000000
+
+unsetopt correctall
+setopt correct

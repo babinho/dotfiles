@@ -75,6 +75,7 @@ alias rdtp="be rake db:test:prepare"
 alias rs='bundle install && rails server -p 3000'
 alias rsd='bundle install && rails server -p 3000 --debugger'
 alias safepush='git pull --rebase && bundle install && rdm && rake && git push'
+alias s='spring'
 alias so='source ~/.dotfiles/zsh/aliases'
 alias ss='ruby app.rb'
 alias startpostgres='pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start'

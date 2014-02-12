@@ -32,21 +32,26 @@ Bundle 'tpope/vim-markdown'
 Bundle 'koron/nyancat-vim'
 Bundle 'vim-scripts/ruby-matchit'
 Bundle 'kien/ctrlp.vim'
-Bundle 'scrooloose/nerdtree'
 Bundle 'bronson/vim-trailing-whitespace'
 Bundle "MarcWeber/vim-addon-mw-utils"
 Bundle "tomtom/tlib_vim"
 Bundle "garbas/vim-snipmate"
 Bundle 'tpope/vim-commentary'
 Bundle 'honza/vim-snippets'
+Bundle "mattn/emmet-vim"
 
-" powerline
-Bundle 'Lokaltog/vim-powerline'
+" a bit of paint
+Bundle 'chriskempson/vim-tomorrow-theme'
+Bundle 'altercation/vim-colors-solarized'
 
 " Clojure
-Bundle 'tpope/vim-foreplay'
+Bundle 'tpope/vim-fireplace'
 Bundle 'tpope/vim-classpath'
 Bundle 'guns/vim-clojure-static'
+
+" Go Support
+Bundle 'jnwhiteh/vim-golang'
+Bundle 'Blackrush/vim-gocode'
 
 " Elixir
 Bundle 'elixir-lang/vim-elixir'
@@ -56,8 +61,12 @@ Bundle "benmills/vimux"
 Bundle 'jgdavey/vim-turbux'
 Bundle "christoomey/vim-tmux-navigator"
 
-"rbenv support
+" rbenv support
 Bundle 'tpope/vim-rbenv'
+
+" ember here we go
+Bundle 'mustache/vim-mustache-handlebars'
+Bundle 'dsawardekar/ember.vim'
 
 runtime macros/matchit.vim
 
@@ -90,13 +99,13 @@ map <Leader>fw :FixWhitespace<CR>
 map <Leader>fix :cnoremap % %<CR>
 map <Leader>h :nohl<CR>
 map <Leader>i mmgg=G`m<CR>
-map <Leader>j :NERDTreeToggle<CR>
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 map <Leader>sm :RSmodel
 map <Leader>so :so %<cr>
 map <Leader>vi :tabe ~/.vimrc<CR>
 map <Leader>w <C-w>w
 map <Leader>x :exec getline(".")<cr>
+map <leader>z :call ToggleSpring()<CR>
 
 " split resizing
 map <Leader>+ <C-w>+
@@ -110,12 +119,8 @@ map <Leader>e :e <C-R>=expand("%:p:h") . '/'<CR>
 map <Leader>s :split <C-R>=expand("%:p:h") . '/'<CR>
 map <Leader>v :vnew <C-R>=expand("%:p:h") . '/'<CR>
 
-map <C-o> :nohl<cr>
-imap <C-l> :<Space>
-map <C-t> <esc>:tabnew<CR>
 map <C-x> <C-w>c
 map <C-n> :cn<CR>
-map <C-p> :cp<CR>
 
 " Emacs-like beginning and end of line.
 imap <c-e> <c-o>$
@@ -127,7 +132,7 @@ set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
 set autoindent
 set showmatch
-" set nowrap
+set nowrap
 set backupdir=~/.tmp
 set directory=~/.tmp " Don't clutter my dirs up with swp and tmp files
 set autoread
@@ -151,19 +156,27 @@ set tags=./tags;
 " set iskeyword-=_
 
 " Use Silver Searcher instead of grep
-set grepprg=ag
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+
+  " bind \ (backward slash) to grep shortcut
+  command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+
+  nnoremap \ :Ag<SPACE>
+endif
 
 " Get rid of the delay when hitting esc!
 set noesckeys
 
-" Make the omnicomplete text readable
-:highlight PmenuSel ctermfg=black
-
 " Fuzzy finder: ignore stuff that can't be opened, and generated files
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
-
-" Highlight the status line
-" highlight StatusLine ctermfg=blue ctermbg=yellow
 
 " Format xml files
 au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
@@ -179,8 +192,8 @@ command! Qall qall
 " Disable Ex mode
 map Q <Nop>
 
-" Disable K looking stuff up
-map K <Nop>
+" bind K to grep word under cursor
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " When loading text files, wrap them and don't split up words.
 au BufNewFile,BufRead *.txt setlocal wrap
@@ -198,6 +211,9 @@ set ttimeoutlen=1
 
 " Turn on spell-checking in markdown and text.
 au BufRead,BufNewFile *.md,*.txt,*.markdown setlocal spell
+
+" Turn on spell-checking in gitcommits
+au FileType gitcommit setlocal spell
 
 " Merge a tab into a split in the previous window
 function! MergeTabs()
@@ -271,20 +287,28 @@ endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-inoremap <Tab> <C-P>
+" Spring toggle and turbux integration
+let g:spring_enabled='false'
+
+fun! ToggleSpring()
+  if g:spring_enabled == 'true'
+    let g:spring_enabled='false'
+    let g:turbux_command_prefix=''
+    :!spring stop
+    echo 'Spring is disabled'
+  else
+    let g:spring_enabled='true'
+    let g:turbux_command_prefix='spring'
+    :!spring
+    echo 'Spring is enabled'
+  endif
+endfun
+""""""""""""""""""""""""""""""
 
 " Let's be reasonable, shall we?
 nmap k gk
 nmap j gj
 
-
-" Set up some useful Rails.vim bindings for working with Backbone.js
-autocmd User Rails Rnavcommand template    app/assets/templates               -glob=**/*  -suffix=.jst.ejs
-autocmd User Rails Rnavcommand jmodel      app/assets/javascripts/models      -glob=**/*  -suffix=.coffee
-autocmd User Rails Rnavcommand jview       app/assets/javascripts/views       -glob=**/*  -suffix=.coffee
-autocmd User Rails Rnavcommand jcollection app/assets/javascripts/collections -glob=**/*  -suffix=.coffee
-autocmd User Rails Rnavcommand jrouter     app/assets/javascripts/routers     -glob=**/*  -suffix=.coffee
-autocmd User Rails Rnavcommand jspec       spec/javascripts                   -glob=**/*  -suffix=.coffee
 
 " Don't add the comment prefix when I hit enter or o/O on a comment line.
 set formatoptions-=or
@@ -354,14 +378,9 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif
 
-set background=dark
-colorscheme tir_black
 set t_Co=256
-
-" Powerline stuff
-set laststatus=2
-set encoding=utf-8
-let g:Powerline_symbols='fancy'
+set bg=dark
+colorscheme ir_black
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
@@ -393,7 +412,7 @@ if has("autocmd")
   augroup END
 
   " Clean whitespace in ruby and haml
-  au BufWritePre *.rb,*.haml FixWhitespace
+  au BufWritePre *.rb,*.rake,*.js FixWhitespace
 
 endif " has("autocmd")
 
@@ -405,9 +424,8 @@ set ttymouse=xterm2
 command! Marked silent !open -a "Marked.app" "%:p"
 
 " don't clear screen when background/resume
-set t_ti= t_te=
+" set t_ti= t_te=
 
-" always show the tab line
-set showtabline=2
+set wildignore+=*.so,*.swp,*.zip
+let g:turbux_command_cucumber='cucumber'
 
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip
