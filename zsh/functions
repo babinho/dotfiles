@@ -18,7 +18,7 @@ function git-nuke {
 
 function git-on-master {
   branch=`git_branch_name`
-  git checkout master && git pull --rebase 
+  git checkout master && git pull --rebase
   git checkout $branch
   git rebase master
   }
@@ -45,3 +45,4 @@ function take {
 function gc {
   git commit -m "$*"
 }
+

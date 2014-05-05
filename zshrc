@@ -1,3 +1,8 @@
+if [ -n "$ZSH_VERSION" ]; then
+  if [ "${(k)path[(r)/usr/bin]}" -lt "${(k)path[(r)/usr/local/bin]}" ]; then
+    path=(${path#/usr/local/bin})
+  fi
+fi
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.dotfiles/oh-my-zsh
 
@@ -44,13 +49,14 @@ stty stop undef
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew bundler zsh-syntax-highlighting ruby chruby)
+plugins=(git brew zsh-syntax-highlighting ruby bundler chruby)
 
 source $ZSH/oh-my-zsh.sh
 
 # Source my custom files after oh-my-zsh so I can override things.
 source $HOME/.dotfiles/zsh/aliases
 source $HOME/.dotfiles/zsh/functions
+source $HOME/.dotfiles/zsh/tmux_functions
 
 # Show contents of directory after cd-ing into it
 chpwd() {
@@ -58,27 +64,14 @@ chpwd() {
 }
 
 # Customize to your needs...
-PATH=/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin
+PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin
 
-PATH=$HOME/.cask/bin:$PATH # Add cask to PATH
-
-# chruby
-#source /usr/local/opt/chruby/share/chruby/chruby.sh
-#source /usr/local/opt/chruby/share/chruby/auto.sh
-
-chruby ruby-2.0.0-p353
-
-export PATH=$PATH:/usr/texbin
+PATH=$PATH:/usr/texbin
 
 # Setting for the new UTF-8 terminal support in Lion
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export EDITOR='vim'
-
-# vim commands for the shell
-set -o vi
-
-source ~/bin/tmuxinator.zsh
 
 # ruby GC tuning
 export RUBY_GC_HEAP_INIT_SLOTS=2000000
@@ -87,3 +80,8 @@ export RUBY_GC_MALLOC_LIMIT=100000000
 
 unsetopt correctall
 setopt correct
+# export PATH="$HOME/.rbenv/bin:$PATH"
+# eval "$(rbenv init -)"
+export PATH="$(consolidate-path)"
+
+chruby 2.1.1

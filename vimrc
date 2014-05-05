@@ -22,7 +22,6 @@ Bundle 'tpope/vim-unimpaired'
 Bundle 'kana/vim-textobj-user'
 Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'tpope/vim-bundler'
-Bundle 'tpope/vim-rake'
 
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'tpope/vim-endwise'
@@ -35,14 +34,10 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'bronson/vim-trailing-whitespace'
 Bundle "MarcWeber/vim-addon-mw-utils"
 Bundle "tomtom/tlib_vim"
+
 Bundle "garbas/vim-snipmate"
 Bundle 'tpope/vim-commentary'
 Bundle 'honza/vim-snippets'
-Bundle "mattn/emmet-vim"
-
-" a bit of paint
-Bundle 'chriskempson/vim-tomorrow-theme'
-Bundle 'altercation/vim-colors-solarized'
 
 " Clojure
 Bundle 'tpope/vim-fireplace'
@@ -61,9 +56,6 @@ Bundle "benmills/vimux"
 Bundle 'jgdavey/vim-turbux'
 Bundle "christoomey/vim-tmux-navigator"
 
-" rbenv support
-Bundle 'tpope/vim-rbenv'
-
 " ember here we go
 Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'dsawardekar/ember.vim'
@@ -80,7 +72,7 @@ augroup myfiletypes
   " Clear old autocmds in group
   autocmd!
   " autoindent with two spaces, always expand tabs
-  autocmd FileType ruby,eruby,yaml set ai sw=2 sts=2 et
+  au FileType ruby,eruby,yaml set ai sw=2 sts=2 et
 augroup END
 " ================
 
@@ -88,30 +80,14 @@ let mapleader = ","
 
 map <Leader>bb :!bundle install<cr>
 nmap <Leader>bi :source ~/.vimrc<cr>:BundleInstall<cr>
-map <Leader>c :so coverage.vim<CR>
-map <Leader>co ggVG"*y
-map <Leader>gac :Gcommit -m -a ""<LEFT>
-map <Leader>gc :Gcommit -m ""<LEFT>
-map <Leader>gs :Gstatus<CR>
-map <Leader>gw :!git add . && git commit -m 'WIP' && git push<cr>
 map <Leader>f :call OpenFactoryFile()<CR>
 map <Leader>fw :FixWhitespace<CR>
 map <Leader>fix :cnoremap % %<CR>
 map <Leader>h :nohl<CR>
 map <Leader>i mmgg=G`m<CR>
-map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
-map <Leader>sm :RSmodel
 map <Leader>so :so %<cr>
 map <Leader>vi :tabe ~/.vimrc<CR>
-map <Leader>w <C-w>w
-map <Leader>x :exec getline(".")<cr>
 map <leader>z :call ToggleSpring()<CR>
-
-" split resizing
-map <Leader>+ <C-w>+
-map <Leader>- <C-w>-
-map <Leader>> <C-w>>
-map <Leader>< <C-w><
 
 " Edit another file in the same directory as the current file
 " uses expression to extract path from current file's path
@@ -119,12 +95,10 @@ map <Leader>e :e <C-R>=expand("%:p:h") . '/'<CR>
 map <Leader>s :split <C-R>=expand("%:p:h") . '/'<CR>
 map <Leader>v :vnew <C-R>=expand("%:p:h") . '/'<CR>
 
-map <C-x> <C-w>c
-map <C-n> :cn<CR>
+" Read file from the same directory in the current buffer
+map <Leader>r :r <C-R>=expand("%:p:h") . '/'<CR>
 
-" Emacs-like beginning and end of line.
-imap <c-e> <c-o>$
-imap <c-a> <c-o>^
+map <C-n> :cn<CR>
 
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
 set history=500		" keep 500 lines of command line history
@@ -145,7 +119,8 @@ set smarttab
 set noincsearch
 set ignorecase smartcase
 set laststatus=2  " Always show status line.
-set relativenumber
+set nu
+set rnu
 set gdefault " assume the /g flag on :s substitutions to replace all matches in a line
 set autoindent " always set autoindenting on
 
@@ -176,7 +151,7 @@ endif
 set noesckeys
 
 " Fuzzy finder: ignore stuff that can't be opened, and generated files
-let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
+let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;coverage/**;tmp/**;rdoc/**"
 
 " Format xml files
 au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
@@ -323,7 +298,7 @@ function! OpenJasmineSpecInBrowser()
   silent exec "!open ~/bin/chrome" url
 endfunction
 
-" set statusline+=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 
 let g:CommandTMaxHeight=50
 let g:CommandTMatchWindowAtTop=1
@@ -339,9 +314,6 @@ function! OpenFactoryFile()
     execute ":sp spec/factories.rb"
   end
 endfunction
-
-" Set gutter background to black
-highlight SignColumn ctermbg=black
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " RENAME CURRENT FILE (thanks Gary Bernhardt)
@@ -379,8 +351,16 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 set t_Co=256
-set bg=dark
-colorscheme ir_black
+colorscheme grb256
+
+" Make the omnicomplete text readable
+highlight PmenuSel ctermfg=black
+
+" Highlight the status line
+highlight StatusLine ctermfg=blue ctermbg=yellow
+
+" Set gutter background to black
+highlight SignColumn ctermbg=black
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
@@ -427,5 +407,7 @@ command! Marked silent !open -a "Marked.app" "%:p"
 " set t_ti= t_te=
 
 set wildignore+=*.so,*.swp,*.zip
-let g:turbux_command_cucumber='cucumber'
+
+" don't redraw after each macro run
+set lazyredraw
 
