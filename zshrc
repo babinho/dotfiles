@@ -49,7 +49,7 @@ stty stop undef
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew zsh-syntax-highlighting ruby bundler chruby)
+plugins=(git brew zsh-syntax-highlighting ruby bundler)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -80,8 +80,10 @@ export RUBY_GC_MALLOC_LIMIT=100000000
 
 unsetopt correctall
 setopt correct
-# export PATH="$HOME/.rbenv/bin:$PATH"
-# eval "$(rbenv init -)"
-export PATH="$(consolidate-path)"
 
-chruby 2.1.1
+PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+PATH=$PATH:$GOPATH/bin
+
+export PATH="$(consolidate-path)"
+export GOPATH=$HOME/go

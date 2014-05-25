@@ -357,10 +357,10 @@ colorscheme grb256
 highlight PmenuSel ctermfg=black
 
 " Highlight the status line
-highlight StatusLine ctermfg=blue ctermbg=yellow
+" highlight StatusLine ctermfg=blue ctermbg=yellow
 
 " Set gutter background to black
-highlight SignColumn ctermbg=black
+" highlight SignColumn ctermbg=black
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")

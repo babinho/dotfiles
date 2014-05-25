@@ -48,6 +48,30 @@ function spotbe {
   tmux attach-session -t spotbe
 }
 
+function spotbe_admin {
+  cd "$HOME/code/spotbe-admin"
+
+  tmux start-server
+  tmux new-session -d -s spotbe_admin -n editor
+  tmux new-window -t spotbe_admin:2 -n git
+  tmux new-window -t spotbe_admin:3 -n console
+  tmux new-window -t spotbe_admin:4 -n server
+
+  tmux send-keys -t spotbe_admin:1 "vim" C-m
+  tmux send-keys -t spotbe_admin:2 "gg" C-m
+  tmux send-keys -t spotbe_admin:3 "spring rails c" C-m
+  tmux send-keys -t spotbe_admin:4 "foreman start -f Procfile.dev" C-m
+
+  tmux select-window -t spotbe_admin:1
+  tmux split-window -h
+  tmux select-pane -t 2
+  tmux send-keys "RPROMPT=" C-m
+  tmux resize-pane -t 2 -R 60
+  tmux select-pane -t 1
+
+  tmux attach-session -t spotbe_admin
+}
+
 function doutore {
   cd "$HOME/code/doctorhouse"
 
