@@ -7,58 +7,69 @@ call pathogen#helptags()
 " Vundle stuff
 " ========================================================================
 set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+call vundle#begin()
 
 " Let Vundle manage Vundle (required)!
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
 " My bundles
-Bundle 'ervandew/supertab'
+Plugin 'ervandew/supertab'
 
-Bundle 'vim-ruby/vim-ruby'
-Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-rails'
-Bundle 'tpope/vim-unimpaired'
-Bundle 'kana/vim-textobj-user'
-Bundle 'nelstrom/vim-textobj-rubyblock'
-Bundle 'tpope/vim-bundler'
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-rails'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'kana/vim-textobj-user'
+Plugin 'nelstrom/vim-textobj-rubyblock'
+Plugin 'tpope/vim-bundler'
 
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'tpope/vim-endwise'
-Bundle 'tpope/vim-repeat'
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-markdown'
-Bundle 'koron/nyancat-vim'
-Bundle 'vim-scripts/ruby-matchit'
-Bundle 'kien/ctrlp.vim'
-Bundle 'bronson/vim-trailing-whitespace'
-Bundle "MarcWeber/vim-addon-mw-utils"
-Bundle "tomtom/tlib_vim"
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'tpope/vim-endwise'
+Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-markdown'
+Plugin 'koron/nyancat-vim'
+Plugin 'vim-scripts/ruby-matchit'
+Plugin 'kien/ctrlp.vim'
+Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
 
-Bundle "garbas/vim-snipmate"
-Bundle 'tpope/vim-commentary'
-Bundle 'honza/vim-snippets'
+Plugin 'garbas/vim-snipmate'
+Plugin 'tpope/vim-commentary'
+Plugin 'honza/vim-snippets'
 
 " Clojure
-Bundle 'tpope/vim-fireplace'
-Bundle 'tpope/vim-classpath'
-Bundle 'guns/vim-clojure-static'
+Plugin 'tpope/vim-fireplace'
+Plugin 'tpope/vim-classpath'
+Plugin 'guns/vim-clojure-static'
 
 " Go Support
-Bundle 'jnwhiteh/vim-golang'
-Bundle 'Blackrush/vim-gocode'
+Plugin 'fatih/vim-go'
 
 " Elixir
-Bundle 'elixir-lang/vim-elixir'
+Plugin 'elixir-lang/vim-elixir'
 
 " tmux support
-Bundle "benmills/vimux"
-Bundle 'jgdavey/vim-turbux'
-Bundle "christoomey/vim-tmux-navigator"
+Plugin 'benmills/vimux'
+Plugin 'jgdavey/vim-turbux'
+Plugin 'christoomey/vim-tmux-navigator'
 
 " ember here we go
-Bundle 'mustache/vim-mustache-handlebars'
-Bundle 'dsawardekar/ember.vim'
+Plugin 'mustache/vim-mustache-handlebars'
+Plugin 'dsawardekar/ember.vim'
+Plugin 'slim-template/vim-slim'
+
+" Dash integration
+Plugin 'rizzatti/dash.vim'
+
+" JellyBeans colorscheme
+Plugin 'nanotech/jellybeans.vim'
+
+" A bit of focus
+Plugin 'merlinrebrovic/focus.vim'
+
+call vundle#end() " required
 
 runtime macros/matchit.vim
 
@@ -99,6 +110,8 @@ map <Leader>v :vnew <C-R>=expand("%:p:h") . '/'<CR>
 map <Leader>r :r <C-R>=expand("%:p:h") . '/'<CR>
 
 map <C-n> :cn<CR>
+
+nmap <silent> <leader>d <Plug>DashSearch
 
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
 set history=500		" keep 500 lines of command line history
@@ -383,7 +396,7 @@ if has("autocmd")
 
     " When editing a file, always jump to the last known cursor position.
     " Don't do it when the position is invalid or when inside an event handler
-    " (happens when dropping a file on gvim).
+    " (happens when dropping a file n gvim).
     autocmd BufReadPost *
           \ if line("'\"") > 0 && line("'\"") <= line("$") |
           \   exe "normal g`\"" |
@@ -408,6 +421,18 @@ command! Marked silent !open -a "Marked.app" "%:p"
 
 set wildignore+=*.so,*.swp,*.zip
 
-" don't redraw after each macro run
-set lazyredraw
+set ttyfast " u got a fast terminal
+set ttyscroll=3
+set lazyredraw " to avoid scrolling problems
 
+" consider emblem templates same as slim
+au BufNewFile,BufRead *.emblem set filetype=slim
+
+" consider axlsx templates same as ruby
+au BufNewFile,BufRead *.axlsx set filetype=ruby
+
+fun! CreateFolderForFile()
+  exec ':!mkdir -p %:h'
+endfun
+map <Leader>w :call CreateFolderForFile()<CR>
+map <Leader>rs :%s/\ :\{1}\([^ :]*\)\(\s*\)=>/\ \1:/c <CR>
