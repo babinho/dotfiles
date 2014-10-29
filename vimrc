@@ -39,6 +39,8 @@ Plugin 'garbas/vim-snipmate'
 Plugin 'tpope/vim-commentary'
 Plugin 'honza/vim-snippets'
 
+"Plugin 'scrooloose/syntastic'
+
 " Clojure
 Plugin 'tpope/vim-fireplace'
 Plugin 'tpope/vim-classpath'

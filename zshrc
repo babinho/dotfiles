@@ -31,7 +31,7 @@ SAVEHIST=20000
 # CASE_SENSITIVE="true"
 
 # Comment this out to disable weekly auto-update checks
-# DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="true"
 
 # Uncomment following line if you want to disable colors in ls
 # DISABLE_LS_COLORS="true"
@@ -49,7 +49,7 @@ stty stop undef
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew zsh-syntax-highlighting chruby ruby bundler)
+plugins=(git brew zsh-syntax-highlighting ruby bundler)
 
 # allow [ and ]
 unsetopt nomatch
@@ -69,8 +69,8 @@ chpwd() {
 
 # Customize to your needs...
 PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin
-
 PATH=$PATH:/usr/texbin
+
 
 # Setting for the new UTF-8 terminal support in Lion
 export LC_CTYPE=en_US.UTF-8
@@ -82,15 +82,13 @@ export RUBY_GC_HEAP_INIT_SLOTS=2000000
 export RUBY_HEAP_FREE_MIN=20000
 export RUBY_GC_MALLOC_LIMIT=100000000
 
+PATH=$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH
+eval "$(rbenv init -)"
+
 unsetopt correctall
 setopt correct
-
-#PATH="./bin:$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"
-#eval "$(rbenv init -)"
 
 export GOPATH=$HOME/go
 PATH=$PATH:$GOPATH/bin
 
 export PATH="$(consolidate-path)"
-chruby 2.1.3
-chruby 2.1.3
